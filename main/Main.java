@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import controleur.Deplacement;
 import vue.*;
 import modele.*;
-import modele.thread.Defilement;
+import modele.thread.Virage;
 
 public class Main {
 
@@ -17,7 +17,7 @@ public class Main {
         Vue affichage = new Vue(modele);
         modele.setVue(affichage);
         Deplacement deplacement = new Deplacement(affichage, vehicule);
-        Defilement defilement = new Defilement(modele);
+        Virage virage = new Virage(modele);
         affichage.addKeyListener(deplacement);
         JFrame test = new JFrame("Course");
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
