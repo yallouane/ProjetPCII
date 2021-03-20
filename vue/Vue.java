@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import modele.Modele;
+import modele.Route;
 
 public class Vue extends JPanel {
 
@@ -53,14 +55,22 @@ public class Vue extends JPanel {
     /**
      * Position des deux lignes, limite de la route
      */
-    public static final double ROUTE_DROITE = OVAL_X + 125;
-    public static final double ROUTE_GAUCHE = OVAL_X - 125;
+    public static final double ROUTE_DROITE = 3 * P_WIDTH / 8;
+    public static final double ROUTE_GAUCHE = 5 * P_WIDTH / 8;
+    
+    /**
+     * Constante entiere servant à l'impression de profondeur
+     */
+    public static final int IMP_PROF = 5;
 
     /**
      * Attributs
      */
     // Modele de la vue
     private Modele modele;
+    
+    private int valeurVirageG;// Incrementer pour aller à droite, decrementer pour aller a gauche
+    private int valeurVirageD;// Incrementer pour aller à gauche, decrementer pour aller a droite
 
     /**
      * Constructeur
@@ -70,6 +80,8 @@ public class Vue extends JPanel {
     public Vue(Modele modele) {
         setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
         this.modele = modele;
+        this.valeurVirageG = -400;
+        this.valeurVirageD = 400;
     }
 
     /**
@@ -85,6 +97,27 @@ public class Vue extends JPanel {
         this.modele = modele;
     }
 
+    public int getValeurVirageG() {
+        return valeurVirageG;
+    }
+
+    public void setValeurVirageG(int valeurVirageG) {
+        this.valeurVirageG = valeurVirageG;
+    }
+
+    public int getValeurVirageD() {
+        return valeurVirageD;
+    }
+
+    public void setValeurVirageD(int valeurVirageD) {
+        this.valeurVirageD = valeurVirageD;
+    }
+    
+    
+    
+    
+
+    @Override
     public void paint(Graphics g) {
         this.requestFocusInWindow();
         revalidate();
@@ -93,8 +126,14 @@ public class Vue extends JPanel {
         g.drawString(this.modele.getVehicule().getVitesse() + "", 150, 150); // affichage de la vitesse
         Graphics2D g2 = (Graphics2D) g;
         affichageRoute(g2);
-        g2.draw(modele.getRoute().genererVirageGG());
-        g2.draw(modele.getRoute().genererVirageGD());
+        Point2D middleG = new Point2D.Double(P_WIDTH / 2 + valeurVirageG, LIGNEHORIZONY);
+        Point2D middleD = new Point2D.Double(P_WIDTH / 2 - valeurVirageD, LIGNEHORIZONY);
+        Point2D debutG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE);
+        Point2D debutD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE);
+        Point2D ctrlG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
+        Point2D ctrlD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
+        g2.draw(modele.getRoute().genererVirageGG(debutG, ctrlG, middleG));
+        g2.draw(modele.getRoute().genererVirageGD(debutD, ctrlD, middleD));
     }
 
     public void affichageVehicule(Graphics g) {
