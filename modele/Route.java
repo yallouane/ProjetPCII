@@ -55,22 +55,15 @@ public class Route {
      *
      * @return QuadCurve2D
      */
-
-    public QuadCurve2D genererVirageGG() {
+    public QuadCurve2D genererVirageGG(Point2D debutG, Point2D ctrlG, Point2D finGG) {
         QuadCurve2D courbe = new QuadCurve2D.Double();
-        Point2D.Double debutG = new Point2D.Double(Vue.ROUTE_GAUCHE, Vue.P_HEIGHT / 2);
-        Point2D.Double ctrlG = new Point2D.Double(Vue.ROUTE_GAUCHE, Vue.LIGNEHORIZONY);
-        Point2D.Double fin = new Point2D.Double(0, Vue.LIGNEHORIZONY);
-        courbe.setCurve(debutG, ctrlG, fin);
+        courbe.setCurve(debutG, ctrlG, finGG);
         return courbe;
     }
-    
-    public QuadCurve2D genererVirageGD() {
+
+    public QuadCurve2D genererVirageGD(Point2D debutD, Point2D ctrlD, Point2D finGD) {
         QuadCurve2D courbe = new QuadCurve2D.Double();
-        Point2D.Double debutD = new Point2D.Double(Vue.ROUTE_DROITE, Vue.P_HEIGHT / 2);
-        Point2D.Double ctrlD = new Point2D.Double(Vue.ROUTE_DROITE, Vue.LIGNEHORIZONY);
-        Point2D.Double fin = new Point2D.Double(0, Vue.LIGNEHORIZONY);
-        courbe.setCurve(debutD, ctrlD, fin);
+        courbe.setCurve(debutD, ctrlD, finGD);
         return courbe;
     }
 
