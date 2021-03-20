@@ -61,4 +61,3 @@ public class Deplacement implements KeyListener {
     }
 
 }
-
