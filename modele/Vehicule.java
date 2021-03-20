@@ -3,23 +3,23 @@ package modele;
 import vue.Vue;
 
 public class Vehicule {
-	
-	 /**
-     * CONSTANTES servant au déplacement du véhicule (vertical et horizontal)
+
+    /**
+     * CONSTANTES servant au dÃ©placement du vÃ©hicule (vertical et horizontal)
      */
-    
     public static final String HAUT = "HAUT";
     public static final String BAS = "BAS";
     public static final String GAUCHE = "GAUCHE";
     public static final String DROITE = "DROITE";
+    
+    //Constantes dÃ©finissant 
     public static final int POS_INC = 5;
     public static final int VIT_INC = 1;
     public static final int VIT_LIMITE = 150;
-
     /**
      * Attributs
      */
-    // Position en x et en y du véhicule
+    // Position en x et en y du vÃ©hicule
     private int positionX;
     private int positionY;
 
@@ -37,9 +37,10 @@ public class Vehicule {
         this.positionY = positionY;
         this.vitesse = 10;
     }
-    
+
     /**
      * Getters & Setters
+     *
      * @return Integers
      */
     public int getPositionX() {
@@ -65,39 +66,40 @@ public class Vehicule {
     public void setVitesse(int vitesse) {
         this.vitesse = vitesse;
     }
-	
+
+    /**
+     * Methodes
+     */
     /**
      * methode definissant le deplacement du vehicule lorsque le controleur
      * detecte qu'une touche a ete pressee
      *
      * @param valeur
      */
-	public void deplacement(String valeur) {
-		 if (valeur == HAUT) {
-	            if (this.positionY >= Vue.ACC_LIMITE) {
-	                this.positionY -= POS_INC;
-	            }
-	            if (this.vitesse <= VIT_LIMITE - VIT_INC) {
-	                this.vitesse += VIT_INC;
-	            } 
-		}
-		else if(valeur == BAS ) {
-			if(this.positionY <= Vue.DEC_LIMITE) {
-				this.positionY += POS_INC;
-			}
-			if(this .vitesse > 0)  {
-					this.vitesse -= VIT_INC;
-			}
-			if(this.vitesse <= 0) {
-				System.out.println("game Over");
-			}
-		}
-		else if(valeur == GAUCHE) {
-			this.positionX -=5;
-		}
-		else if(valeur == DROITE) {
-			this.positionX +=5;
-		}
-	}
-	
+    public void deplacement(String valeur) {
+        if (null != valeur) switch (valeur) {
+            case HAUT:
+                if (this.positionY >= Vue.ACC_LIMITE) {
+                    this.positionY -= POS_INC;
+                }   if (this.vitesse <= VIT_LIMITE - VIT_INC) {
+                    this.vitesse += VIT_INC;
+                }   break;
+            case BAS:
+                if(this.positionY <= Vue.DEC_LIMITE) {
+                    this.positionY += POS_INC;
+                }   if(this .vitesse > 0)  {
+                    this.vitesse -= VIT_INC;
+                }   if(this.vitesse <= 0) {
+                    System.out.println("Game Over");
+                }   break;
+            case GAUCHE:
+                this.positionX -= 5;
+                break;
+            case DROITE:
+                this.positionX += 5;
+                break;
+            default:
+                break;
+        }
+    }
 }
