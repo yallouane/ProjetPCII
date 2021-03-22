@@ -2,6 +2,22 @@ package modele;
 
 import vue.Vue;
 
+/**
+ * Main est la classe principale du projet Course
+ * 
+ * Elle initialise toute les classes, à savoir : 
+ * 
+ * - le modèle de la route      : route (@see modele.Route.java)
+ * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
+ * - le modèle principal        : modele (@see modele.Modele.java)
+ * - la vue                     : affichage (@see vue.Vue.java)
+ * - le controleur              : deplacement (@see controleur.Deplacement.java)
+ * - le thread de virage        : virage (@see modele.thread.Virage.java)
+ * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
+ * 
+ * @author gpoisson, yallouane
+ * @version 1.0
+ */
 public class Vehicule {
 
     /**
@@ -11,7 +27,7 @@ public class Vehicule {
     public static final String BAS = "BAS";
     public static final String GAUCHE = "GAUCHE";
     public static final String DROITE = "DROITE";
-    
+
     //Constantes définissant 
     public static final int POS_INC = 5;
     public static final int VIT_INC = 1;
@@ -25,6 +41,9 @@ public class Vehicule {
 
     // Vitesse du vehicule
     private int vitesse;
+
+    // Modele du vehicule
+    private Modele modele;
 
     /**
      * Constructeur
@@ -67,6 +86,14 @@ public class Vehicule {
         this.vitesse = vitesse;
     }
 
+    public Modele getModele() {
+        return modele;
+    }
+
+    public void setModele(Modele modele) {
+        this.modele = modele;
+    }
+
     /**
      * Methodes
      */
@@ -77,29 +104,36 @@ public class Vehicule {
      * @param valeur
      */
     public void deplacement(String valeur) {
-        if (null != valeur) switch (valeur) {
-            case HAUT:
-                if (this.positionY >= Vue.ACC_LIMITE) {
-                    this.positionY -= POS_INC;
-                }   if (this.vitesse <= VIT_LIMITE - VIT_INC) {
-                    this.vitesse += VIT_INC;
-                }   break;
-            case BAS:
-                if(this.positionY <= Vue.DEC_LIMITE) {
-                    this.positionY += POS_INC;
-                }   if(this .vitesse > 0)  {
-                    this.vitesse -= VIT_INC;
-                }   if(this.vitesse <= 0) {
-                    System.out.println("Game Over");
-                }   break;
-            case GAUCHE:
-                this.positionX -= 5;
-                break;
-            case DROITE:
-                this.positionX += 5;
-                break;
-            default:
-                break;
+        if (null != valeur) {
+            switch (valeur) {
+                case HAUT:
+                    if (this.positionY >= Vue.ACC_LIMITE) {
+                        this.positionY -= POS_INC;
+                    }
+                    if (this.vitesse <= VIT_LIMITE - VIT_INC) {
+                        this.vitesse += VIT_INC;
+                    }
+                    break;
+                case BAS:
+                    if (this.positionY <= Vue.DEC_LIMITE) {
+                        this.positionY += POS_INC;
+                    }
+                    if (this.vitesse > 0) {
+                        this.vitesse -= VIT_INC;
+                    }
+                    if (this.vitesse <= 0) {
+                        System.out.println("Game Over");
+                    }
+                    break;
+                case GAUCHE:
+                    this.positionX -= 5;
+                    break;
+                case DROITE:
+                    this.positionX += 5;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
