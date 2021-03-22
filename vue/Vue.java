@@ -1,6 +1,8 @@
 package vue;
 
+import controleur.Deplacement;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -13,7 +15,24 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import modele.Modele;
 import modele.Route;
+import modele.thread.Checkpoint;
 
+/**
+ * Main est la classe principale du projet Course
+ * 
+ * Elle initialise toute les classes, à savoir : 
+ * 
+ * - le modèle de la route      : route (@see modele.Route.java)
+ * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
+ * - le modèle principal        : modele (@see modele.Modele.java)
+ * - la vue                     : affichage (@see vue.Vue.java)
+ * - le controleur              : deplacement (@see controleur.Deplacement.java)
+ * - le thread de virage        : virage (@see modele.thread.Virage.java)
+ * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
+ * 
+ * @author gpoisson, yallouane
+ * @version 1.0
+ */
 public class Vue extends JPanel {
 
     /**
@@ -57,7 +76,7 @@ public class Vue extends JPanel {
      */
     public static final double ROUTE_DROITE = 3 * P_WIDTH / 8;
     public static final double ROUTE_GAUCHE = 5 * P_WIDTH / 8;
-    
+
     /**
      * Constante entiere servant à l'impression de profondeur
      */
@@ -68,9 +87,17 @@ public class Vue extends JPanel {
      */
     // Modele de la vue
     private Modele modele;
+
+    //KeyListener (controleur) de la vue
+    private Deplacement kl;
     
     private int valeurVirageG;// Incrementer pour aller à droite, decrementer pour aller a gauche
     private int valeurVirageD;// Incrementer pour aller à gauche, decrementer pour aller a droite
+
+    private Point2D debutG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE + 10);
+    private Point2D debutD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE + 10);
+    private Point2D ctrlG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
+    private Point2D ctrlD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
 
     /**
      * Constructeur
@@ -80,8 +107,8 @@ public class Vue extends JPanel {
     public Vue(Modele modele) {
         setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
         this.modele = modele;
-        this.valeurVirageG = -400;
-        this.valeurVirageD = 400;
+        this.valeurVirageG = 5;
+        this.valeurVirageD = 5;
     }
 
     /**
@@ -92,50 +119,96 @@ public class Vue extends JPanel {
     public Modele getModele() {
         return modele;
     }
-
+    
     public void setModele(Modele modele) {
         this.modele = modele;
     }
-
+    
     public int getValeurVirageG() {
         return valeurVirageG;
     }
-
+    
     public void setValeurVirageG(int valeurVirageG) {
         this.valeurVirageG = valeurVirageG;
     }
-
+    
     public int getValeurVirageD() {
         return valeurVirageD;
     }
-
+    
     public void setValeurVirageD(int valeurVirageD) {
         this.valeurVirageD = valeurVirageD;
     }
     
+    public Point2D getDebutG() {
+        return debutG;
+    }
     
+    public void setDebutG(Point2D debutG) {
+        this.debutG = debutG;
+    }
     
+    public Point2D getDebutD() {
+        return debutD;
+    }
     
-
+    public void setDebutD(Point2D debutD) {
+        this.debutD = debutD;
+    }
+    
+    public Point2D getCtrlG() {
+        return ctrlG;
+    }
+    
+    public void setCtrlG(Point2D ctrlG) {
+        this.ctrlG = ctrlG;
+    }
+    
+    public Point2D getCtrlD() {
+        return ctrlD;
+    }
+    
+    public void setCtrlD(Point2D ctrlD) {
+        this.ctrlD = ctrlD;
+    }
+    
+    public Deplacement getKl() {
+        return kl;
+    }
+    
+    public void setKl(Deplacement kl) {
+        this.kl = kl;
+    }
+    
     @Override
     public void paint(Graphics g) {
         this.requestFocusInWindow();
         revalidate();
         super.paint(g);
         affichageVehicule(g);
+        affichageImageHorizon(g);
         g.drawString(this.modele.getVehicule().getVitesse() + "", 150, 150); // affichage de la vitesse
         Graphics2D g2 = (Graphics2D) g;
         affichageRoute(g2);
         Point2D middleG = new Point2D.Double(P_WIDTH / 2 + valeurVirageG, LIGNEHORIZONY);
         Point2D middleD = new Point2D.Double(P_WIDTH / 2 - valeurVirageD, LIGNEHORIZONY);
-        Point2D debutG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE);
-        Point2D debutD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE);
-        Point2D ctrlG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
-        Point2D ctrlD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
-        g2.draw(modele.getRoute().genererVirageGG(debutG, ctrlG, middleG));
-        g2.draw(modele.getRoute().genererVirageGD(debutD, ctrlD, middleD));
+        g2.draw(modele.getRoute().genererVirage(debutG, ctrlG, middleG));
+        g2.draw(modele.getRoute().genererVirage(debutD, ctrlD, middleD));
+        if (modele.getVehicule().getVitesse() <= 0 || modele.getTimer().getTimer() % Checkpoint.DUREE_CHECKPOINT <= 0) {
+            game_over(g);
+        }
     }
-
+    
+    public void affichageImageHorizon(Graphics g) {
+        try {
+            BufferedImage img;
+            img = ImageIO.read(new File("src/ressources/fond.jpg"));
+            g.drawImage(img, 0, 0, P_WIDTH, LIGNEHORIZONY, null);
+        } catch (IOException e) {
+            System.out.println("Exception affichage Image Horizon : " + e.toString());
+        }
+    }
+    
     public void affichageVehicule(Graphics g) {
         try {
             BufferedImage img;
@@ -143,14 +216,22 @@ public class Vue extends JPanel {
             img = ImageIO.read(new File("src/ressources/img_vaisseau.png"));
             g.drawImage(img, this.modele.getVehicule().getPositionX(), this.modele.getVehicule().getPositionY(), OVAL_WIDTH, OVAL_HEIGHT, null);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception affichage Image Vehicule : " + e.toString());
         }
     }
-
+    
     public void affichageRoute(Graphics2D g2) {
         for (int i = 0; i < this.modele.getRoute().getRouteDroite().size() - 1; i++) {
             g2.draw(new Line2D.Double(this.modele.getRoute().getRouteDroite().get(i).getX(), this.modele.getRoute().getRouteDroite().get(i).getY(), this.modele.getRoute().getRouteDroite().get(i + 1).getX(), this.modele.getRoute().getRouteDroite().get(i + 1).getY()));
             g2.draw(new Line2D.Double(this.modele.getRoute().getRouteGauche().get(i).getX(), this.modele.getRoute().getRouteGauche().get(i).getY(), this.modele.getRoute().getRouteGauche().get(i + 1).getX(), this.modele.getRoute().getRouteGauche().get(i + 1).getY()));
         }
+    }
+    
+    public void game_over(Graphics g) {
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 45));
+        g.drawString("GAME OVER", P_WIDTH / 2, P_HEIGHT / 2);
+        modele.getVirage().interrupt();
+        modele.getTimer().interrupt();
+        this.removeKeyListener(this.getKl());
     }
 }
