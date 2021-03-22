@@ -8,6 +8,29 @@ import vue.Vue;
 import modele.Route;
 import modele.Vehicule;
 
+/**
+ * @deprecated
+ * <p>
+ * <b>Defilement</b> est une classe <b>depreciée.</b>
+ *
+ * Elle est <b>soit à refaire, soit à retirer</b>
+ *
+ * Elle a pour attributs :
+ * <ul>
+ * <li>le modèle principal : modele (@see modele.Modele.java)</li>
+ * </ul>
+ * et hérite de la classe Thread. Elle contient donc la fonction run, qui
+ * contient le code a faire executer par le thread, ainsi que 2 fonctions :
+ * <ul>
+ * <li>la fonction ajout_rajout, qui fait reculer les points constituant la
+ * route vers le bas, et en rajoute si il doit le faire. </li>
+ * <li>la fonction defilementRoute, qui appelle la fonction ajout_rajout et met
+ * à jour les attributs du modèle route lié à l'attibut modèle de la classe</li>
+ * </ul>
+ * </p>
+ * @author gpoisson, yallouane
+ * @version 1.0
+ */
 public class Defilement extends Thread {
 
     public static final int Y_SPEED = 10000;
@@ -61,8 +84,6 @@ public class Defilement extends Thread {
                 Point2D tmp2 = new Point2D.Double(routeGauche.get(routeGauche.size() - 1).getX(), gauchey);
                 routeGauche.add(tmp2);
             }
-
         }
-
     }
 }
