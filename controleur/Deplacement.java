@@ -6,6 +6,22 @@ import java.awt.event.KeyListener;
 import modele.Vehicule;
 import vue.Vue;
 
+/**
+ * Main est la classe principale du projet Course
+ * 
+ * Elle initialise toute les classes, à savoir : 
+ * 
+ * - le modèle de la route      : route (@see modele.Route.java)
+ * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
+ * - le modèle principal        : modele (@see modele.Modele.java)
+ * - la vue                     : affichage (@see vue.Vue.java)
+ * - le controleur              : deplacement (@see controleur.Deplacement.java)
+ * - le thread de virage        : virage (@see modele.thread.Virage.java)
+ * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
+ * 
+ * @author gpoisson, yallouane
+ * @version 1.0
+ */
 public class Deplacement implements KeyListener {
 
     private Vue affichage;
