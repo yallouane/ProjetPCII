@@ -3,22 +3,22 @@ package modele.thread;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modele.Modele;
+import modele.Obstacle;
 import modele.Route;
 import vue.Vue;
 
 /**
  * Main est la classe principale du projet Course
- * 
- * Elle initialise toute les classes, à savoir : 
- * 
- * - le modèle de la route      : route (@see modele.Route.java)
- * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
- * - le modèle principal        : modele (@see modele.Modele.java)
- * - la vue                     : affichage (@see vue.Vue.java)
- * - le controleur              : deplacement (@see controleur.Deplacement.java)
- * - le thread de virage        : virage (@see modele.thread.Virage.java)
- * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
- * 
+ *
+ * Elle initialise toute les classes, à savoir :
+ *
+ * - le modèle de la route : route (@see modele.Route.java) - le modèle du
+ * vehicule : vehicule (@see modele.Vehicule.java) - le modèle principal :
+ * modele (@see modele.Modele.java) - la vue : affichage (@see vue.Vue.java) -
+ * le controleur : deplacement (@see controleur.Deplacement.java) - le thread de
+ * virage : virage (@see modele.thread.Virage.java) - le thread de checkpoint :
+ * timer (@see modele.thread.Checkpoint.java)
+ *
  * @author gpoisson, yallouane
  * @version 1.0
  */
@@ -32,7 +32,7 @@ public class Virage extends Thread {
     private int alea;
 
     private boolean isCenter;
-    
+
     private boolean running;
 
     Modele modele;
@@ -64,14 +64,14 @@ public class Virage extends Thread {
     }
 
     public boolean isRunning() {
-		return running;
-	}
+        return running;
+    }
 
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
 
-	public Virage(Modele modele) {
+    public Virage(Modele modele) {
         this.modele = modele;
         new Thread(this).start();
         this.isCenter = true;
@@ -117,7 +117,14 @@ public class Virage extends Thread {
                 valeurVirageG++;
                 valeurVirageD--;
                 cpt++;
-                this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+                if (this.modele.getObstacle().getPositionY() >= Vue.P_HEIGHT) {
+                    this.modele.getObstacle().genererObstacle();
+                } else {
+                    this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+                    if (this.modele.getObstacle().getWidthheight() >= Obstacle.MAXWIDTHHEIGHT) {
+                        this.modele.getObstacle().setWidthheight(this.modele.getObstacle().getWidthheight() + 1);
+                    }
+                }
                 this.modele.getVue().setValeurVirageG(valeurVirageG);
                 this.modele.getVue().setValeurVirageD(valeurVirageD);
                 if (ctrlG > Vue.LIGNEHORIZONY) {
@@ -137,7 +144,14 @@ public class Virage extends Thread {
                 valeurVirageG--;
                 valeurVirageD++;
                 cpt++;
-                this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+                if (this.modele.getObstacle().getPositionY() >= Vue.P_HEIGHT) {
+                    this.modele.getObstacle().genererObstacle();
+                } else {
+                    this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+                    if (this.modele.getObstacle().getWidthheight() >= Obstacle.MAXWIDTHHEIGHT) {
+                        this.modele.getObstacle().setWidthheight(this.modele.getObstacle().getWidthheight() + 1);
+                    }
+                }
                 this.modele.getVue().setValeurVirageG(valeurVirageG);
                 this.modele.getVue().setValeurVirageD(valeurVirageD);
                 if (ctrlG > Vue.LIGNEHORIZONY) {
@@ -163,7 +177,14 @@ public class Virage extends Thread {
             Logger.getLogger(Virage.class.getName()).log(Level.SEVERE, null, ex);
         }
         cpt++;
-        this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+        if (this.modele.getObstacle().getPositionY() >= Vue.P_HEIGHT) {
+            this.modele.getObstacle().genererObstacle();
+        } else {
+            this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
+            if (this.modele.getObstacle().getWidthheight() <= Obstacle.MAXWIDTHHEIGHT) {
+                this.modele.getObstacle().setWidthheight(this.modele.getObstacle().getWidthheight() + 1);
+            }
+        }
     }
 
 }
