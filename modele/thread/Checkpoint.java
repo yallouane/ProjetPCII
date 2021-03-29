@@ -32,7 +32,7 @@ public class Checkpoint extends Thread {
 
     public Checkpoint(Modele modele) {
         this.modele = modele;
-        this.timer = 30;
+        this.timer = 15;
         this.running = true;
         new Thread(this).start();
     }
@@ -65,10 +65,12 @@ public class Checkpoint extends Thread {
     public void run() {
         while(running) {
 	        try {
+	        	
 	            Thread.sleep(1000,0);
 	            this.timer--;
+	            
 	        } catch (InterruptedException ex) {
-	            System.out.print("ProblÃ¨me Defilement Sleep Checkpoint");
+	            System.out.print("Problème Defilement Sleep Checkpoint");
 	        }
         }
     }
