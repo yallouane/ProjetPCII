@@ -186,15 +186,17 @@ public class Vue extends JPanel {
         revalidate();
         super.paint(g);
         affichageVehicule(g);
+        affichageObstacle(g);
         affichageImageHorizon(g);
-        g.drawString(this.modele.getVehicule().getVitesse() + "", 150, 150); // affichage de la vitesse
+        g.drawString("Vitesse : " + this.modele.getVehicule().getVitesse() , 0, P_HEIGHT-10); // affichage de la vitesse
         Graphics2D g2 = (Graphics2D) g;
         affichageRoute(g2);
         Point2D middleG = new Point2D.Double(P_WIDTH / 2 + valeurVirageG, LIGNEHORIZONY);
         Point2D middleD = new Point2D.Double(P_WIDTH / 2 - valeurVirageD, LIGNEHORIZONY);
         g2.draw(modele.getRoute().genererVirage(debutG, ctrlG, middleG));
         g2.draw(modele.getRoute().genererVirage(debutD, ctrlD, middleD));
-        if (modele.getVehicule().getVitesse() <= 0 || modele.getTimer().getTimer() % Checkpoint.DUREE_CHECKPOINT <= 0) {
+        afficherTimer(g, this.modele.getTimer());
+        if (modele.getVehicule().getVitesse() <= 0 || modele.getTimer().getTimer() <= 0 ) {
             game_over(g);
         }
     }
@@ -230,8 +232,23 @@ public class Vue extends JPanel {
     public void game_over(Graphics g) {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 45));
         g.drawString("GAME OVER", P_WIDTH / 2, P_HEIGHT / 2);
-        modele.getVirage().interrupt();
-        modele.getTimer().interrupt();
+        this.modele.getVirage().setRunning(false);
+        this.modele.getTimer().setRunning(false);
         this.removeKeyListener(this.getKl());
+    }
+    
+    public void afficherTimer(Graphics g, Checkpoint c) {
+    	 g.drawString("Temps : " + c.getTimer() , 0, P_HEIGHT-25 ); // affichage de la vitesse
+    }
+    
+    public void affichageObstacle(Graphics g) {
+        try {
+            BufferedImage img;
+            g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
+            img = ImageIO.read(new File("src/ressources/meteorite_1.png"));
+            g.drawImage(img, this.modele.getObstacle().getPositionX(), this.modele.getObstacle().getPositionY(), 50, 50, null);
+        } catch (IOException e) {
+            System.out.println("Exception affichage Image Vehicule : " + e.toString());
+        }
     }
 }
