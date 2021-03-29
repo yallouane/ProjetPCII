@@ -43,6 +43,7 @@ public class Main {
         Checkpoint timer = new Checkpoint(modele);
         modele.setTimer(timer);
         modele.setVirage(virage);
+        modele.setObstacle(new Obstacle(Vue.P_WIDTH / 2, Vue.LIGNEHORIZONY));
         affichage.addKeyListener(deplacement);
         JFrame test = new JFrame("Course");
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
