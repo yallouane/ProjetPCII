@@ -1,6 +1,7 @@
 package vue;
 
 import controleur.Deplacement;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -185,9 +186,11 @@ public class Vue extends JPanel {
         this.requestFocusInWindow();
         revalidate();
         super.paint(g);
+        couleur_fond(g);
         affichageVehicule(g);
         affichageObstacle(g);
         affichageImageHorizon(g);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 25));
         g.drawString("Vitesse : " + this.modele.getVehicule().getVitesse(), 0, P_HEIGHT - 10); // affichage de la vitesse
         Graphics2D g2 = (Graphics2D) g;
         affichageRoute(g2);
@@ -237,8 +240,21 @@ public class Vue extends JPanel {
         this.removeKeyListener(this.getKl());
     }
 
+    public void couleur_fond(Graphics g) {
+        try {
+            BufferedImage img;
+            g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
+            img = ImageIO.read(new File("src/ressources/fond2.png"));
+            g.drawImage(img, 0, LIGNEHORIZONY, P_WIDTH, P_HEIGHT - LIGNEHORIZONY, null);
+            g.setColor(Color.WHITE);
+        } catch (IOException e) {
+            System.out.println("Exception affichage image fond : " + e.toString());
+        }
+    }
+
     public void afficherTimer(Graphics g, Checkpoint c) {
-        g.drawString("Temps : " + c.getTimer(), 0, P_HEIGHT - 25); // affichage de la vitesse
+        g.setFont(new Font("TimesRoman", Font.BOLD, 25));
+        g.drawString("Temps : " + c.getTimer(), 0, P_HEIGHT - 40); // affichage de la vitesse
     }
 
     public void affichageObstacle(Graphics g) {
