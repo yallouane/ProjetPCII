@@ -1,6 +1,9 @@
 package modele.thread;
 
+import java.awt.Graphics;
+
 import modele.Modele;
+import vue.Vue;
 
 /**
  * Main est la classe principale du projet Course
@@ -25,14 +28,24 @@ public class Checkpoint extends Thread {
     public static final int DUREE_CHECKPOINT = 100;
 
     int timer;
+    private boolean running;
 
     public Checkpoint(Modele modele) {
         this.modele = modele;
-        this.timer = 1;
+        this.timer = 30;
+        this.running = true;
         new Thread(this).start();
     }
 
-    public Modele getModele() {
+    public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public Modele getModele() {
         return modele;
     }
 
@@ -50,15 +63,15 @@ public class Checkpoint extends Thread {
 
     @Override
     public void run() {
-        timer++;
-        if (timer % DUREE_CHECKPOINT == 0) {
-            System.out.println("GAME OVER");
-        }
-        try {
-            Thread.sleep(100, 0);
-        } catch (InterruptedException ex) {
-            System.out.print("Problème Defilement Sleep Checkpoint");
+        while(running) {
+	        try {
+	            Thread.sleep(1000,0);
+	            this.timer--;
+	        } catch (InterruptedException ex) {
+	            System.out.print("Problème Defilement Sleep Checkpoint");
+	        }
         }
     }
 
+    
 }

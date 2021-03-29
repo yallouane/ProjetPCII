@@ -32,6 +32,8 @@ public class Virage extends Thread {
     private int alea;
 
     private boolean isCenter;
+    
+    private boolean running;
 
     Modele modele;
 
@@ -45,14 +47,13 @@ public class Virage extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             if (isCenter && cpt >= CPT_VIRAGE) {
                 virage(modele.getVue().getValeurVirageG(), modele.getVue().getValeurVirageD(), modele.getVue().getCtrlG().getY(), modele.getVue().getCtrlD().getY());
             } else {
                 to_middle(modele.getVue().getValeurVirageG(), modele.getVue().getValeurVirageD(), modele.getVue().getCtrlG().getY(), modele.getVue().getCtrlD().getY());
             }
             incrementer();
-            System.out.println("CPT : " + cpt);
             this.modele.getVue().repaint();
             try {
                 Thread.sleep(SLEEP_VIRAGE - modele.getVehicule().getVitesse(), 0);
@@ -62,11 +63,20 @@ public class Virage extends Thread {
         }
     }
 
-    public Virage(Modele modele) {
+    public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public Virage(Modele modele) {
         this.modele = modele;
         new Thread(this).start();
         this.isCenter = true;
         this.cpt = 50;
+        this.running = true;
         alea = modele.getRoute().randomInt(1, 3);
     }
 
@@ -74,13 +84,9 @@ public class Virage extends Thread {
         if (valeurVirageG > Vue.IMP_PROF) {
             valeurVirageG--;
             valeurVirageD++;
-            System.out.println("Valeur Virage Gauche : " + valeurVirageG);
-            System.out.println("Valeur Virage Droite : " + valeurVirageD);
         } else if (valeurVirageD > Vue.IMP_PROF) {
             valeurVirageD--;
             valeurVirageG++;
-            System.out.println("Valeur Virage Gauche : " + valeurVirageG);
-            System.out.println("Valeur Virage Droite : " + valeurVirageD);
         } else {
             if (valeurVirageG < 5) {
                 valeurVirageG++;
@@ -106,15 +112,12 @@ public class Virage extends Thread {
     }
 
     public void virage(int valeurVirageG, int valeurVirageD, double ctrlG, double ctrlD) {
-        System.out.println("Alea : " + alea);
         if (alea == 1) {
             if (valeurVirageG != 540) {
                 valeurVirageG++;
                 valeurVirageD--;
                 cpt++;
-                System.out.println("Compteur : " + cpt);
-                System.out.println("Valeur Virage Gauche : " + valeurVirageG);
-                System.out.println("Valeur Virage Droite : " + valeurVirageD);
+                this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
                 this.modele.getVue().setValeurVirageG(valeurVirageG);
                 this.modele.getVue().setValeurVirageD(valeurVirageD);
                 if (ctrlG > Vue.LIGNEHORIZONY) {
@@ -134,9 +137,7 @@ public class Virage extends Thread {
                 valeurVirageG--;
                 valeurVirageD++;
                 cpt++;
-                System.out.println("Compteur : " + cpt);
-                System.out.println("Valeur Virage Gauche : " + valeurVirageG);
-                System.out.println("Valeur Virage Droite : " + valeurVirageD);
+                this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
                 this.modele.getVue().setValeurVirageG(valeurVirageG);
                 this.modele.getVue().setValeurVirageD(valeurVirageD);
                 if (ctrlG > Vue.LIGNEHORIZONY) {
@@ -162,6 +163,7 @@ public class Virage extends Thread {
             Logger.getLogger(Virage.class.getName()).log(Level.SEVERE, null, ex);
         }
         cpt++;
+        this.modele.getObstacle().setPositionY(this.modele.getObstacle().getPositionY() + 5);
     }
 
 }
