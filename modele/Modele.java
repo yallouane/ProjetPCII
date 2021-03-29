@@ -35,6 +35,8 @@ public class Modele {
     private Checkpoint timer;
     // Thread Virage
     private Virage virage;
+    
+    private Obstacle obstacle;
 
     /**
      * Constructeur
@@ -47,7 +49,15 @@ public class Modele {
         this.vehicule = vehicule;
     }
 
-    /**
+    public Obstacle getObstacle() {
+		return obstacle;
+	}
+
+	public void setObstacle(Obstacle obstacle) {
+		this.obstacle = obstacle;
+	}
+
+	/**
      * Getters & Setters
      *
      * @return Vehicule, route, vue

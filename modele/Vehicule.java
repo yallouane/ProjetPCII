@@ -126,11 +126,21 @@ public class Vehicule {
                     }
                     break;
                 case GAUCHE:
-                    this.positionX -= 5;
+                	if(this.positionX<= Vue.ROUTE_DROITE) {
+                		this.positionX = (int) Vue.ROUTE_DROITE;
+                	}
+                	else {
+                		this.positionX -= 5;
+                	}
                     break;
                 case DROITE:
-                    this.positionX += 5;
-                    break;
+                	if(this.positionX >= 598) {
+                		this.positionX = 598;
+                	}
+                	else {
+                		this.positionX += 5;
+                	}
+                	break;
                 default:
                     break;
             }
