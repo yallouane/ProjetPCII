@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import modele.Modele;
 import modele.Route;
-import modele.thread.Checkpoint;
+import modele.thread.Timer;
 
 /**
  * Main est la classe principale du projet Course
@@ -29,7 +29,7 @@ import modele.thread.Checkpoint;
  * modele (@see modele.Modele.java) - la vue : affichage (@see vue.Vue.java) -
  * le controleur : deplacement (@see controleur.Deplacement.java) - le thread de
  * virage : virage (@see modele.thread.Virage.java) - le thread de checkpoint :
- * timer (@see modele.thread.Checkpoint.java)
+ * timer (@see modele.thread.Timer.java)
  *
  * @author gpoisson, yallouane
  * @version 1.0
@@ -189,6 +189,8 @@ public class Vue extends JPanel {
         couleur_fond(g);
         affichageVehicule(g);
         affichageObstacle(g);
+        affichageCheckpoint(g);
+        this.modele.getObstacle().detectionObstacle();
         affichageImageHorizon(g);
         g.setFont(new Font("TimesRoman", Font.BOLD, 25));
         g.drawString("Vitesse : " + this.modele.getVehicule().getVitesse(), 0, P_HEIGHT - 10); // affichage de la vitesse
@@ -198,10 +200,10 @@ public class Vue extends JPanel {
         Point2D middleD = new Point2D.Double(P_WIDTH / 2 - valeurVirageD, LIGNEHORIZONY);
         g2.draw(modele.getRoute().genererVirage(debutG, ctrlG, middleG));
         g2.draw(modele.getRoute().genererVirage(debutD, ctrlD, middleD));
-        afficherTimer(g, this.modele.getTimer());
+        affichageTimer(g, this.modele.getTimer());
         if (modele.getVehicule().getVitesse() <= 0 || modele.getTimer().getTimer() <= 0) {
             game_over(g);
-        }
+        }affichageCheckpoint(g);
     }
 
     public void affichageImageHorizon(Graphics g) {
@@ -252,7 +254,7 @@ public class Vue extends JPanel {
         }
     }
 
-    public void afficherTimer(Graphics g, Checkpoint c) {
+    public void affichageTimer(Graphics g, Timer c) {
         g.setFont(new Font("TimesRoman", Font.BOLD, 25));
         g.drawString("Temps : " + c.getTimer(), 0, P_HEIGHT - 40); // affichage de la vitesse
     }
@@ -267,11 +269,15 @@ public class Vue extends JPanel {
                 this.modele.getObstacle().genererObstacle();
                 Random random = new Random();
                 int nb;
-                nb = random.nextInt(2);
+                nb = random.nextInt(4);
                 System.out.println("NB : " + nb);
                 switch (nb) {
                     case 1 ->
                         this.modele.getObstacle().setFile("src/ressources/meteorite_2.png");
+                    case 2 ->
+                        this.modele.getObstacle().setFile("src/ressources/meteorite_3.png");
+                    case 3 ->
+                        this.modele.getObstacle().setFile("src/ressources/concurrent.png");
                     default ->
                         this.modele.getObstacle().setFile("src/ressources/meteorite_1.png");
                 }
@@ -279,6 +285,13 @@ public class Vue extends JPanel {
         } catch (IOException e) {
             System.out.println("Exception affichage Image Vehicule : " + e.toString());
         }
+    }
+
+    public void affichageCheckpoint(Graphics g) {
+        g.setColor(Color.RED);
+        g.drawLine(this.modele.getCheckpoint().getPositionXGauche(), this.modele.getCheckpoint().getPositionY(), this.modele.getCheckpoint().getPositionXDroite(), this.modele.getCheckpoint().getPositionY());
+        g.setColor(Color.WHITE);
+        System.out.println("Affichage");
     }
 
 }
