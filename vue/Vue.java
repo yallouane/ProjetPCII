@@ -203,7 +203,13 @@ public class Vue extends JPanel {
         affichageTimer(g, this.modele.getTimer());
         if (modele.getVehicule().getVitesse() <= 0 || modele.getTimer().getTimer() <= 0) {
             game_over(g);
-        }affichageCheckpoint(g);
+        }
+        /*g.setColor(Color.RED);
+        g.drawLine(this.modele.getCheckpoint().getPositionXGauche(), this.modele.getCheckpoint().getPositionY(), this.modele.getCheckpoint().getPositionXDroite(), this.modele.getCheckpoint().getPositionY());
+        g.setColor(Color.WHITE);
+        System.out.println(this.modele.getCheckpoint().getPositionXGauche());
+        System.out.println(this.modele.getCheckpoint().getPositionXDroite());*/
+        affichageCheckpoint(g);
     }
 
     public void affichageImageHorizon(Graphics g) {
@@ -288,10 +294,17 @@ public class Vue extends JPanel {
     }
 
     public void affichageCheckpoint(Graphics g) {
-        g.setColor(Color.RED);
-        g.drawLine(this.modele.getCheckpoint().getPositionXGauche(), this.modele.getCheckpoint().getPositionY(), this.modele.getCheckpoint().getPositionXDroite(), this.modele.getCheckpoint().getPositionY());
-        g.setColor(Color.WHITE);
-        System.out.println("Affichage");
+        if (this.modele.getCheckpoint().getPositionY() < this.modele.getVehicule().getPositionY()) {
+            g.setColor(Color.RED);
+            g.drawLine(this.modele.getCheckpoint().getPositionXGauche(), this.modele.getCheckpoint().getPositionY(), this.modele.getCheckpoint().getPositionXDroite(), this.modele.getCheckpoint().getPositionY());
+            g.setColor(Color.WHITE);
+        } else {
+            this.modele.getTimer().setTimer(Timer.DUREE_CHECKPOINT);
+            this.modele.getCheckpoint().setPositionY(LIGNEHORIZONY);
+            this.modele.getCheckpoint().setPositionXDroite(P_WIDTH / 2 - valeurVirageD);
+            this.modele.getCheckpoint().setPositionXGauche(P_WIDTH / 2 + valeurVirageG);
+        }
+
     }
 
 }
