@@ -301,8 +301,8 @@ public class Vue extends JPanel {
         } else {
             this.modele.getTimer().setTimer(Timer.DUREE_CHECKPOINT);
             this.modele.getCheckpoint().setPositionY(LIGNEHORIZONY);
-            this.modele.getCheckpoint().setPositionXDroite(P_WIDTH / 2 - valeurVirageD);
-            this.modele.getCheckpoint().setPositionXGauche(P_WIDTH / 2 + valeurVirageG);
+            this.modele.getCheckpoint().setPositionXDroite(P_WIDTH / 2);
+            this.modele.getCheckpoint().setPositionXGauche(P_WIDTH / 2);
         }
 
     }
