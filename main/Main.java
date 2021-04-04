@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import controleur.Deplacement;
 import vue.*;
 import modele.*;
-import modele.thread.Checkpoint;
+import modele.thread.Timer;
 import modele.thread.Virage;
 
 /**
@@ -20,7 +20,7 @@ import modele.thread.Virage;
  * <li>la vue : affichage (@see vue.Vue.java)</li>
  * <li>le controleur : deplacement (@see controleur.Deplacement.java)</li>
  * <li>le thread de virage : virage (@see modele.thread.Virage.java)</li>
- * <li>le thread de checkpoint : timer (@see modele.thread.Checkpoint.java)</li>
+ * <li>le thread de checkpoint : timer (@see modele.thread.Timer.java)</li>
  * </ul>
  * </p>
  *
@@ -33,17 +33,22 @@ public class Main {
         Route route = new Route();
         route.genererLigne();
         Vehicule vehicule = new Vehicule(Vue.OVAL_X, Vue.OVAL_Y);
+        Checkpoint checkpoint = new Checkpoint();
         Modele modele = new Modele(vehicule, route);
+        modele.setCheckpoint(checkpoint);
         vehicule.setModele(modele);
         Vue affichage = new Vue(modele);
         modele.setVue(affichage);
+        checkpoint.setModele(modele);
         Deplacement deplacement = new Deplacement(affichage, vehicule);
         affichage.setKl(deplacement);
         Virage virage = new Virage(modele);
-        Checkpoint timer = new Checkpoint(modele);
+        Timer timer = new Timer(modele);
         modele.setTimer(timer);
         modele.setVirage(virage);
-        modele.setObstacle(new Obstacle(Vue.P_WIDTH / 2, Vue.LIGNEHORIZONY));
+        Obstacle obs = new Obstacle(Vue.P_WIDTH / 2, Vue.LIGNEHORIZONY);
+        modele.setObstacle(obs);
+        obs.setModele(modele);
         affichage.addKeyListener(deplacement);
         JFrame test = new JFrame("Course");
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
