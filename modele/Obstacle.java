@@ -25,7 +25,7 @@ public class Obstacle extends Vehicule {
 
     public void detectionObstacle() {
         if (this.getPositionY() >= this.modele.getVehicule().getPositionY() && this.getPositionY() <= this.modele.getVehicule().getPositionY() + Vue.OVAL_HEIGHT) {
-            if (this.getPositionX() >= this.modele.getVehicule().getPositionX() && this.getPositionX() <= this.modele.getVehicule().getPositionX() + Vue.OVAL_WIDTH) {
+            if (this.getPositionX() + widthheight >= this.modele.getVehicule().getPositionX() && this.getPositionX() <= this.modele.getVehicule().getPositionX() + Vue.OVAL_WIDTH) {
                 this.modele.getVehicule().collision();
             }
         }

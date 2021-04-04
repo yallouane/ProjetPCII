@@ -20,8 +20,9 @@ public class Checkpoint {
 
     public void baisser() {
         this.positionY = this.positionY + 1;
-        this.positionXDroite = (this.positionXDroite < Vue.ROUTE_GAUCHE) ? this.positionXDroite + 1 : this.positionXDroite;
-        this.positionXGauche = (this.positionXGauche > Vue.ROUTE_DROITE) ? this.positionXGauche - 1 : this.positionXGauche;
+
+        this.positionXDroite = (this.positionXDroite < Vue.ROUTE_GAUCHE) ? this.positionXDroite + 1 : this.positionXDroite - 1;
+        this.positionXGauche = (this.positionXGauche > Vue.ROUTE_DROITE) ? this.positionXGauche - 1 : this.positionXGauche + 1;
     }
 
     public int getPositionXGauche() {
@@ -54,8 +55,8 @@ public class Checkpoint {
 
     public void setModele(Modele modele) {
         this.modele = modele;
-        this.positionXGauche = Vue.P_WIDTH / 2 + this.modele.getVue().getValeurVirageG();
-        this.positionXDroite = Vue.P_WIDTH / 2 - this.modele.getVue().getValeurVirageD();
+        this.positionXGauche = Vue.P_WIDTH / 2;
+        this.positionXDroite = Vue.P_WIDTH / 2;
     }
 
 }
