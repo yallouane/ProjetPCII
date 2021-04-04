@@ -22,14 +22,14 @@ public class Timer extends Thread {
 
     Modele modele;
 
-    public static final int DUREE_CHECKPOINT = 100;
+    public static final int DUREE_CHECKPOINT = 30;
 
     int timer;
     private boolean running;
 
     public Timer(Modele modele) {
         this.modele = modele;
-        this.timer = 30;
+        this.timer = DUREE_CHECKPOINT;
         this.running = true;
         new Thread(this).start();
     }
@@ -63,9 +63,9 @@ public class Timer extends Thread {
         while(running) {
 	        try {
 	            Thread.sleep(1000,0);
-	            this.timer--;
+	            this.setTimer(getTimer() - 1);
 	        } catch (InterruptedException ex) {
-	            System.out.print("Problème Defilement Sleep Checkpoint");
+	            System.out.print("Problème Timer");
 	        }
         }
     }
