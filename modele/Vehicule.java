@@ -32,18 +32,19 @@ public class Vehicule {
     public static final int POS_INC = 5;
     public static final int VIT_INC = 1;
     public static final int VIT_LIMITE = 150;
+    public static final int COLLISION = 4;
     /**
      * Attributs
      */
     // Position en x et en y du véhicule
-    private int positionX;
-    private int positionY;
+    protected int positionX;
+    protected int positionY;
 
     // Vitesse du vehicule
-    private int vitesse;
+    protected int vitesse;
 
     // Modele du vehicule
-    private Modele modele;
+    protected Modele modele;
 
     /**
      * Constructeur
@@ -93,6 +94,10 @@ public class Vehicule {
     public void setModele(Modele modele) {
         this.modele = modele;
     }
+    
+    public void collision(){
+        this.vitesse = this.vitesse - COLLISION;
+    }
 
     /**
      * Methodes
@@ -106,15 +111,15 @@ public class Vehicule {
     public void deplacement(String valeur) {
         if (null != valeur) {
             switch (valeur) {
-                case HAUT:
+                case HAUT -> {
                     if (this.positionY >= Vue.ACC_LIMITE) {
                         this.positionY -= POS_INC;
                     }
                     if (this.vitesse <= VIT_LIMITE - VIT_INC) {
                         this.vitesse += VIT_INC;
                     }
-                    break;
-                case BAS:
+                }
+                case BAS -> {
                     if (this.positionY <= Vue.DEC_LIMITE) {
                         this.positionY += POS_INC;
                     }
@@ -124,25 +129,25 @@ public class Vehicule {
                     if (this.vitesse <= 0) {
                         System.out.println("Game Over");
                     }
-                    break;
-                case GAUCHE:
-                	if(this.positionX<= Vue.ROUTE_DROITE) {
-                		this.positionX = (int) Vue.ROUTE_DROITE;
-                	}
-                	else {
-                		this.positionX -= 5;
-                	}
-                    break;
-                case DROITE:
-                	if(this.positionX >= 598) {
-                		this.positionX = 598;
-                	}
-                	else {
-                		this.positionX += 5;
-                	}
-                	break;
-                default:
-                    break;
+                }
+                case GAUCHE -> {
+                    if(this.positionX<= Vue.ROUTE_DROITE) {
+                        this.positionX = (int) Vue.ROUTE_DROITE;
+                    }
+                    else {
+                        this.positionX -= 5;
+                    }
+                }
+                case DROITE -> {
+                    if(this.positionX >= 598) {
+                        this.positionX = 598;
+                    }
+                    else {
+                        this.positionX += 5;
+                    }
+                }
+                default -> {
+                }
             }
         }
     }

@@ -1,21 +1,21 @@
 package modele;
 
-import modele.thread.Checkpoint;
+import modele.thread.Timer;
 import modele.thread.Virage;
 import vue.Vue;
 
 /**
  * Main est la classe principale du projet Course
- * 
- * Elle initialise toute les classes, à savoir : 
- * 
- * - le modèle de la route      : route (@see modele.Route.java)
- * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
- * - le modèle principal        : modele (@see modele.Modele.java)
- * - la vue                     : affichage (@see vue.Vue.java)
- * - le controleur              : deplacement (@see controleur.Deplacement.java)
- * - le thread de virage        : virage (@see modele.thread.Virage.java)
- * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
+ 
+ Elle initialise toute les classes, à savoir : 
+ 
+ - le modèle de la route      : route (@see modele.Route.java)
+ - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
+ - le modèle principal        : modele (@see modele.Modele.java)
+ - la vue                     : affichage (@see vue.Vue.java)
+ - le controleur              : deplacement (@see controleur.Deplacement.java)
+ - le thread de virage        : virage (@see modele.thread.Virage.java)
+ - le thread de checkpoint    : timer (@see modele.thread.Timer.java)
  * 
  * @author gpoisson, yallouane
  * @version 1.0
@@ -32,11 +32,13 @@ public class Modele {
     // Modele Route
     private Route route;
     // Thread Timer
-    private Checkpoint timer;
+    private Timer timer;
     // Thread Virage
     private Virage virage;
-    
+    // Modele Obstacle
     private Obstacle obstacle;
+    // Modele Checkpoint
+    private Checkpoint checkpoint;
 
     /**
      * Constructeur
@@ -86,11 +88,11 @@ public class Modele {
         this.vue = view;
     }
 
-    public Checkpoint getTimer() {
+    public Timer getTimer() {
         return timer;
     }
 
-    public void setTimer(Checkpoint timer) {
+    public void setTimer(Timer timer) {
         this.timer = timer;
     }
 
@@ -101,5 +103,15 @@ public class Modele {
     public void setVirage(Virage virage) {
         this.virage = virage;
     }
+
+    public Checkpoint getCheckpoint() {
+        return checkpoint;
+    }
+
+    public void setCheckpoint(Checkpoint checkpoint) {
+        this.checkpoint = checkpoint;
+    }
+    
+    
 
 }
