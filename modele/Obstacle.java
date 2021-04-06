@@ -16,7 +16,7 @@ import vue.Vue;
  * <li>une chaine qui contient le chemin de l'image de l'obstacle : file</li>
  * </ul>
  *
- * et contient tout leurs Getters/Setters, ainsi que deux constante :
+ * et contient tout leurs Getters/Setters, ainsi que deux constantes :
  * <ul>
  * <li>un entier representant la taille maximale d'un obstacle :
  * MAXWIDTHHEIGHT</li>

@@ -43,19 +43,39 @@ public class Route {
 
     /**
      * Attributs
-     *
-     * 2 ArrayList, qui contiennent les points des courbes qui definissent les
-     * limites de la route
      */
+    // 2 arrayLists contenant les points2D materialisant les routes
     private ArrayList<Point2D> routeGauche;
     private ArrayList<Point2D> routeDroite;
 
     /**
      * Constructeur
+     *
      */
     public Route() {
         this.routeGauche = new ArrayList<>();
         this.routeDroite = new ArrayList<>();
+    }
+
+    /**
+     * Getters & Setters
+     *
+     * @return ArrayLists de Point2D
+     */
+    public ArrayList<Point2D> getRouteGauche() {
+        return this.routeGauche;
+    }
+
+    public ArrayList<Point2D> getRouteDroite() {
+        return this.routeDroite;
+    }
+
+    public void setRouteGauche(ArrayList<Point2D> routeGauche) {
+        this.routeGauche = routeGauche;
+    }
+
+    public void setRouteDroite(ArrayList<Point2D> routeDroite) {
+        this.routeDroite = routeDroite;
     }
 
     /**
@@ -95,24 +115,4 @@ public class Route {
         return courbe;
     }
 
-    /**
-     * Getters & Setters
-     *
-     * @return ArrayLists de Point2D
-     */
-    public ArrayList<Point2D> getRouteGauche() {
-        return this.routeGauche;
-    }
-
-    public ArrayList<Point2D> getRouteDroite() {
-        return this.routeDroite;
-    }
-
-    public void setRouteGauche(ArrayList<Point2D> routeGauche) {
-        this.routeGauche = routeGauche;
-    }
-
-    public void setRouteDroite(ArrayList<Point2D> routeDroite) {
-        this.routeDroite = routeDroite;
-    }
 }
