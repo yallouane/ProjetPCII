@@ -3,36 +3,93 @@ package modele;
 import vue.Vue;
 
 /**
- * Main est la classe principale du projet Course
- * 
- * Elle initialise toute les classes, à savoir : 
- * 
- * - le modèle de la route      : route (@see modele.Route.java)
- * - le modèle du vehicule      : vehicule (@see modele.Vehicule.java)
- * - le modèle principal        : modele (@see modele.Modele.java)
- * - la vue                     : affichage (@see vue.Vue.java)
- * - le controleur              : deplacement (@see controleur.Deplacement.java)
- * - le thread de virage        : virage (@see modele.thread.Virage.java)
- * - le thread de checkpoint    : timer (@see modele.thread.Checkpoint.java)
- * 
+ * <p>
+ * La classe <b>Vehicule</b> est un modele <b>MVC</b> de vehicule, qui fait
+ * parti du projet <b>Course</b>.
+ *
+ * Elle a pour attributs :
+ * <ul>
+ * <li>le modèle principal : modele (@see modele.Modele.java)</li>
+ * <li>un entier contenant sa position en X : positionX</li>
+ * <li>un entier contenant sa position en Y : positionY</li>
+ * <li>un entier contenant sa vitesse : vitesse</li>
+ * </ul>
+ *
+ * et contient tout leurs Getters/Setters, ainsi que plusieurs constantes :
+ * <ul>
+ * <li>une chaine qui sert lors du contact avec le controleur, contient la
+ * valeur "HAUT" : HAUT </li>
+ * <li>une chaine qui sert lors du contact avec le controleur, contient la
+ * valeur "BAS" : BAS </li>
+ * <li>une chaine qui sert lors du contact avec le controleur, contient la
+ * valeur "GAUCHE" : GAUCHE </li>
+ * <li>une chaine qui sert lors du contact avec le controleur, contient la
+ * valeur "DROITE" : DROITE </li>
+ * <li>un entier representant l'increment a la position lorsqu'on appuie sur une
+ * touche : POS_INC</li>
+ * <li>un entier representant l'increment (ou le decrement) a la vitesse
+ * lorsqu'on appuie sur une touche (haut ou bas) : VIT_INC</li>
+ * <li>un entier representant la vitesse maximale du vehicule : VIT_LIMITE</li>
+ * <li>un entier representant le decrement a la vitesse du vehicule lors d'une
+ * collision : COLLISION</li>
+ * </ul>
+ *
+ * Elle ne possede qu'un seul constructeur, qui prend pour parametres la
+ * position X ainsi que la position Y de l'obstacle, et initialise les
+ * coordonnes du vehicule, ainsi que la vitesse à 10. Elle contient aussi la
+ * fonction servant a changer les coordonnees du vehicule, ainsi que sa vitesse:
+ * <ul>
+ * <li>la methode deplacement, qui prend en parametre une chaine (c.a.d une
+ * chaine ayant pour valeur la valeur de l'une des chaines constante) et la
+ * compare aux constantes, et en fonction de celle correspondante, change la
+ * coordonnee associee et la vitesse dans le cas de haut et bas </li>
+ * <li>la fonction collision, qui est appelle si un obstacle a ete touché, et
+ * qui diminue la vitesse grace a la constante COLLISION (@see
+ * modele.Obstacle.java, fonction detectionObstacle()) </li>
+ * </ul>
+ * </p>
+ *
  * @author gpoisson, yallouane
  * @version 1.0
  */
 public class Vehicule {
 
     /**
-     * CONSTANTES servant au déplacement du véhicule (vertical et horizontal)
+     * CONSTANTES
+     */
+    /**
+     * Servants au deplacement
      */
     public static final String HAUT = "HAUT";
     public static final String BAS = "BAS";
     public static final String GAUCHE = "GAUCHE";
     public static final String DROITE = "DROITE";
 
-    //Constantes définissant 
+    /**
+     * Servants a l'affichage
+     */
+    /**
+     * Contient la valeur ajoutee ou enlevee aux coordonnees lorsque une touche
+     * est pressee
+     */
     public static final int POS_INC = 5;
+
+    /**
+     * Contient la valeur ajoutee ou enlevee a la vitesse lorsque la touche haut
+     * ou bas est pressee
+     */
     public static final int VIT_INC = 1;
+
+    /**
+     * Contient la valeur maximale de la vitesse du vehicule
+     */
     public static final int VIT_LIMITE = 150;
+
+    /**
+     * Contient la valeur qui sera enlevee a la vitesse lors de collisions
+     */
     public static final int COLLISION = 4;
+
     /**
      * Attributs
      */
@@ -48,6 +105,8 @@ public class Vehicule {
 
     /**
      * Constructeur
+     *
+     * initialise la vitesse du vehicule a 10
      *
      * @param positionX
      * @param positionY
@@ -94,32 +153,33 @@ public class Vehicule {
     public void setModele(Modele modele) {
         this.modele = modele;
     }
-    
-    public void collision(){
+
+    /**
+     * Decremente la vitesse du vehicule de la valeur de la constante COLLISION
+     */
+    public void collision() {
         this.vitesse = this.vitesse - COLLISION;
     }
 
     /**
-     * Methodes
-     */
-    /**
-     * methode definissant le deplacement du vehicule lorsque le controleur
+     * Methode definissant le deplacement du vehicule lorsque le controleur
      * detecte qu'une touche a ete pressee
      *
-     * @param valeur
+     * @param valeur : String comparé aux chaines constantes, si valeur n'est
+     * pas égale à l'une d'entre elle, rien ne se passe
      */
     public void deplacement(String valeur) {
         if (null != valeur) {
             switch (valeur) {
-                case HAUT -> {
+                case HAUT:
                     if (this.positionY >= Vue.ACC_LIMITE) {
                         this.positionY -= POS_INC;
                     }
                     if (this.vitesse <= VIT_LIMITE - VIT_INC) {
                         this.vitesse += VIT_INC;
                     }
-                }
-                case BAS -> {
+                    break;
+                case BAS:
                     if (this.positionY <= Vue.DEC_LIMITE) {
                         this.positionY += POS_INC;
                     }
@@ -129,25 +189,23 @@ public class Vehicule {
                     if (this.vitesse <= 0) {
                         System.out.println("Game Over");
                     }
-                }
-                case GAUCHE -> {
-                    if(this.positionX<= Vue.ROUTE_DROITE) {
+                    break;
+                case GAUCHE:
+                    if (this.positionX <= Vue.ROUTE_DROITE) {
                         this.positionX = (int) Vue.ROUTE_DROITE;
-                    }
-                    else {
+                    } else {
                         this.positionX -= 5;
                     }
-                }
-                case DROITE -> {
-                    if(this.positionX >= 598) {
+                    break;
+                case DROITE:
+                    if (this.positionX >= 598) {
                         this.positionX = 598;
-                    }
-                    else {
+                    } else {
                         this.positionX += 5;
                     }
-                }
-                default -> {
-                }
+                    break;
+                default:
+                    break;
             }
         }
     }
