@@ -20,16 +20,71 @@ import modele.Route;
 import modele.thread.Timer;
 
 /**
- * Main est la classe principale du projet Course
+ * <p>
+ * <b>Vue</b> est la <b>Vue </b> du modele <b>MVC</b> du projet <b>Course</b>.
  *
- * Elle initialise toute les classes, à savoir :
+ * Elle a pour attributs :
+ * <ul>
+ * <li>le modèle principal : modele (@see modele.Modele.java)</li>
+ * <li>le controleur : kl (@see controleur.Deplacement.java)</li>
+ * <li>un entier ayant pour valeur la position en X du du point final gauche du
+ * virage : valeurVirageG</li>
+ * <li>un entier ayant pour valeur la position en X du du point final droite du
+ * virage : valeurVirageD</li>
+ * <li>un Point2D, le point de début gauche du virage : debutG</li>
+ * <li>un Point2D, le point de début droit du virage : debutD</li>
+ * <li>un Point2D, le point de controle gauche du virage : ctrlG</li>
+ * <li>un Point2D, le point de controle gauche du virage : ctrlD</li>
+ * </ul>
  *
- * - le modèle de la route : route (@see modele.Route.java) - le modèle du
- * vehicule : vehicule (@see modele.Vehicule.java) - le modèle principal :
- * modele (@see modele.Modele.java) - la vue : affichage (@see vue.Vue.java) -
- * le controleur : deplacement (@see controleur.Deplacement.java) - le thread de
- * virage : virage (@see modele.thread.Virage.java) - le thread de checkpoint :
- * timer (@see modele.thread.Timer.java)
+ * et contient tout leurs Getters/Setters, ainsi que plusieurs constantes :
+ * <ul>
+ * <li>un entier representant la largeur de la fenetre : P_WIDTH</li>
+ * <li>un entier representant la hauteur de la fenetre : P_HEIGHT</li>
+ * <li>un entier representant la largeur du vaisseau : OVAL_WIDTH</li>
+ * <li>un entier representant la hauteur du vaisseau : OVAL_HEIGHT</li>
+ * <li>un entier representant la position minimale en Y du vaisseau (lors de
+ * l'acceleration) : ACC_LIMITE</li>
+ * <li>un entier representant la position maximale en Y du vaisseau (lors de la
+ * deceleration) : DEC_LIMITE</li>
+ * <li>un entier representant la position en Y de la ligne d'horizon :
+ * LIGNEHORIZONY</li>
+ * <li>un entier representant la position de depart en Y du vaisseau en partant
+ * du bas de la fenetre : POS_DEP</li>
+ * <li>un entier representant la position de depart en Y du vaisseau :
+ * OVAL_Y</li>
+ * <li>un entier representant la position de depart en X du vaisseau :
+ * OVAL_X</li>
+ * <li>un reel representant la position en X de la route gauche :
+ * ROUTE_DROITE</li>
+ * <li>un reel representant la position en X de la route droite :
+ * ROUTE_GAUCHE</li>
+ * <li>un entier representant l'ecart entre les deux routes, afin de donner une
+ * impression de profondeur : IMP_PROF</li>
+ * </ul>
+ *
+ * Elle ne possede qu'un seul constructeur, qui prend pour parametre le modele
+ * principal, et initialise les dimensions de la fenetre, le modele, ainsi que
+ * les valeur de fin des courbes virages. Elle contient aussi toutes les
+ * fonctions servant à l'affichage :
+ * <ul>
+ * <li>la fonction paint, qui appelle toutes les autres fonctions ci dessous,
+ * affiche la vitesse en bas à gauche, met a jour les points de fin de courbe et
+ * affiche les virages. Elle verifie également les conditions de game_over</li>
+ * <li>la fonction affichageImageHorizon, qui affiche la ligne d'horizon (dans
+ * le prototype) et l'image au dessus de l'horizon</li>
+ * <li>la fonction affichageVehicule, qui affiche le vehicule </li>
+ * <li>la fonction affichageRoute, qui affiche la route </li>
+ * <li>la fonction couleurFond, qui affiche le fond en dessous de l'horizon
+ * </li>
+ * <li>la fonction affichageTimer, qui affiche le timer en bas à gauche </li>
+ * <li>la fonction affichageObstacle, qui affiche et regenere les obstacle </li>
+ * <li>la fonction affichageCheckpoint, qui affiche et regenere la ligne de
+ * checkpoint </li>
+ * <li>la fonction game_over, qui affiche GAME OVER et stoppe les threads</li>
+ *
+ * </ul>
+ * </p>
  *
  * @author gpoisson, yallouane
  * @version 1.0
@@ -46,17 +101,13 @@ public class Vue extends JPanel {
     public static final int P_HEIGHT = 800;
 
     /**
-     * Largeur et longueur de l'ovale
+     * Largeur et longueur du vaisseau
      */
     public static final int OVAL_WIDTH = 75;
     public static final int OVAL_HEIGHT = 75;
 
     /**
-     * Position par default de l'ovale en x (Position de depart)
-     */
-    public static final int POS_DEP = 100;
-    /**
-     * Position limite de l'ovale lorsqu'il accelere ou decelere
+     * Position limite du vaisseau lorsqu'il accelere ou decelere
      */
     public static final int ACC_LIMITE = P_HEIGHT - 150;
     public static final int DEC_LIMITE = P_HEIGHT - 50;
@@ -67,7 +118,13 @@ public class Vue extends JPanel {
     public static final int LIGNEHORIZONY = 200;
 
     /**
-     * Position de d�part en x et en y de l'ovale
+     * Position par default du vaisseau en Y en partant du bas de la fenetre
+     * (Position de depart)
+     */
+    public static final int POS_DEP = 100;
+
+    /**
+     * Position de depart en x et en y du vaisseau
      */
     public static final int OVAL_X = P_WIDTH / 2 - OVAL_WIDTH / 2;
     public static final int OVAL_Y = P_HEIGHT - POS_DEP;
@@ -108,8 +165,8 @@ public class Vue extends JPanel {
     public Vue(Modele modele) {
         setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
         this.modele = modele;
-        this.valeurVirageG = 5;
-        this.valeurVirageD = 5;
+        this.valeurVirageG = IMP_PROF;
+        this.valeurVirageD = IMP_PROF;
     }
 
     /**
@@ -181,6 +238,13 @@ public class Vue extends JPanel {
         this.kl = kl;
     }
 
+    /**
+     * Affiche la vue. appelle toutes les fonctions d'affichages definies plus
+     * bas. Gere les collisions, affiche la vitesse, les virages, mets a jour
+     * les points de fin des virages, et verifie les conditions de défaite
+     *
+     * @param g : Graphics
+     */
     @Override
     public void paint(Graphics g) {
         this.requestFocusInWindow();
@@ -212,8 +276,15 @@ public class Vue extends JPanel {
         affichageCheckpoint(g);
     }
 
+    /**
+     * Affiche l'image au dessus de l'horizon. Affichait la ligne d'horizon
+     * avant l'ajout d'image
+     *
+     * @param g : Graphics
+     */
     public void affichageImageHorizon(Graphics g) {
         try {
+            //g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
             BufferedImage img;
             img = ImageIO.read(new File("src/ressources/fond.jpg"));
             g.drawImage(img, 0, 0, P_WIDTH, LIGNEHORIZONY, null);
@@ -222,10 +293,15 @@ public class Vue extends JPanel {
         }
     }
 
+    /**
+     * Affiche le vehicule. Affichait un oval, representant le vehicule
+     *
+     * @param g : Graphics
+     */
     public void affichageVehicule(Graphics g) {
         try {
+            //g.drawOval(this.modele.getVehicule().getPositionX(), this.modele.getVehicule().getPositionY(), OVAL_WIDTH, OVAL_HEIGHT);
             BufferedImage img;
-            g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
             img = ImageIO.read(new File("src/ressources/img_vaisseau.png"));
             g.drawImage(img, this.modele.getVehicule().getPositionX(), this.modele.getVehicule().getPositionY(), OVAL_WIDTH, OVAL_HEIGHT, null);
         } catch (IOException e) {
@@ -233,6 +309,12 @@ public class Vue extends JPanel {
         }
     }
 
+    /**
+     * Affiche la route (2 lignes), qu'elle construit a partir des points
+     * renvoyés par le modele de la route
+     *
+     * @param g2 : Graphics2D
+     */
     public void affichageRoute(Graphics2D g2) {
         for (int i = 0; i < this.modele.getRoute().getRouteDroite().size() - 1; i++) {
             g2.draw(new Line2D.Double(this.modele.getRoute().getRouteDroite().get(i).getX(), this.modele.getRoute().getRouteDroite().get(i).getY(), this.modele.getRoute().getRouteDroite().get(i + 1).getX(), this.modele.getRoute().getRouteDroite().get(i + 1).getY()));
@@ -240,6 +322,12 @@ public class Vue extends JPanel {
         }
     }
 
+    /**
+     * Affiche "GAME OVER" au milieu de l'ecran, et stoppe les threads de virage
+     * et de timer
+     *
+     * @param g : Graphics
+     */
     public void game_over(Graphics g) {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 45));
         g.drawString("GAME OVER", P_WIDTH / 2, P_HEIGHT / 2);
@@ -248,23 +336,38 @@ public class Vue extends JPanel {
         this.removeKeyListener(this.getKl());
     }
 
+    /**
+     * Affiche l'image de fond de la route
+     *
+     * @param g : Graphics
+     */
     public void couleur_fond(Graphics g) {
         try {
             BufferedImage img;
-            g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
             img = ImageIO.read(new File("src/ressources/fond2.png"));
             g.drawImage(img, 0, LIGNEHORIZONY, P_WIDTH, P_HEIGHT - LIGNEHORIZONY, null);
-            g.setColor(Color.WHITE);
         } catch (IOException e) {
             System.out.println("Exception affichage image fond : " + e.toString());
         }
     }
 
+    /**
+     * Affiche le timer en bas à gauche
+     *
+     * @param g : Graphics
+     * @param c : Timer (celui lié a l'attribut modele)
+     */
     public void affichageTimer(Graphics g, Timer c) {
         g.setFont(new Font("TimesRoman", Font.BOLD, 25));
         g.drawString("Temps : " + c.getTimer(), 0, P_HEIGHT - 40); // affichage de la vitesse
     }
 
+    /**
+     * Affiche les obstacles. Choisit un obstacle au hasard parmi une varieté
+     * d'obstacles, et l'affiche quand le précédent a disparu
+     *
+     * @param g : Graphics
+     */
     public void affichageObstacle(Graphics g) {
         BufferedImage m;
         g.drawLine(0, LIGNEHORIZONY, P_WIDTH, LIGNEHORIZONY);
@@ -293,6 +396,12 @@ public class Vue extends JPanel {
         }
     }
 
+    /**
+     * Affiche une ligne rouge, qui sert de checkpoint, qui reset le timer.
+     * regenere le checkpoint lorsque celui_ci est passé au dela du vehicule
+     *
+     * @param g : Graphics
+     */
     public void affichageCheckpoint(Graphics g) {
         if (this.modele.getCheckpoint().getPositionY() < this.modele.getVehicule().getPositionY()) {
             g.setColor(Color.RED);
