@@ -16,12 +16,16 @@ import modele.thread.Virage;
  * <ul>
  * <li>le modèle de la route : route (@see modele.Route.java)</li>
  * <li>le modèle du vehicule : vehicule (@see modele.Vehicule.java)</li>
+ * <li>le modèle du checkpoint : checkpoint (@see modele.Checkpoint.java)</li>
  * <li>le modèle principal : modele (@see modele.Modele.java)</li>
  * <li>la vue : affichage (@see vue.Vue.java)</li>
  * <li>le controleur : deplacement (@see controleur.Deplacement.java)</li>
  * <li>le thread de virage : virage (@see modele.thread.Virage.java)</li>
- * <li>le thread de checkpoint : timer (@see modele.thread.Timer.java)</li>
+ * <li>le thread de timer : timer (@see modele.thread.Timer.java)</li>
+ * <li>le modèle des obstacles : obs (@see modele.Obstacle.java)</li>
  * </ul>
+ *
+ * Puis elle affiche la vue
  * </p>
  *
  * @author gpoisson, yallouane
