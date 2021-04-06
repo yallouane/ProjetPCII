@@ -14,7 +14,7 @@ import modele.Modele;
  * <li>le modèle principal : modele (@see modele.Modele.java)</li>
  * <li>un entier contenant un compteur : timer</li>
  * <li>un booleen qui "decide" si le thread continue ou si il doit etre
- * stoppe</li>
+ * stoppe : running</li>
  * </ul>
  *
  * et contient tout leurs Getters/Setters, ainsi qu'une constante :
