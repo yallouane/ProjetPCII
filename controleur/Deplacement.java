@@ -13,7 +13,7 @@ import vue.Vue;
  *
  * Elle a pour attributs :
  * <ul>
- * <li>La vue associee au controleur : affichage</li>
+ * <li>La vue associee au controleur : affichage (@see vue.Vue.java)</li>
  * <li>le modele du vehicule : vehicule</li>
  * </ul>
  *
