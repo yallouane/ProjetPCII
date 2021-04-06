@@ -21,7 +21,7 @@ import modele.thread.Timer;
 
 /**
  * <p>
- * <b>Vue</b> est la <b>Vue </b> du modele <b>MVC</b> du projet <b>Course</b>.
+ * <b>Vue</b> est la <b>Vue</b> du modele <b>MVC</b> du projet <b>Course</b>.
  *
  * Elle a pour attributs :
  * <ul>
@@ -35,6 +35,7 @@ import modele.thread.Timer;
  * <li>un Point2D, le point de début droit du virage : debutD</li>
  * <li>un Point2D, le point de controle gauche du virage : ctrlG</li>
  * <li>un Point2D, le point de controle gauche du virage : ctrlD</li>
+ * <li>un entier, le score du joueur : score</li>
  * </ul>
  *
  * et contient tout leurs Getters/Setters, ainsi que plusieurs constantes :
@@ -131,6 +132,7 @@ public class Vue extends JPanel {
 
     /**
      * Position des deux lignes, limite de la route
+     * Elles ont ete inversee suite a une erreur d'inattention, trop tard pour tout changer
      */
     public static final double ROUTE_DROITE = 3 * P_WIDTH / 8;
     public static final double ROUTE_GAUCHE = 5 * P_WIDTH / 8;
@@ -157,6 +159,9 @@ public class Vue extends JPanel {
     private Point2D ctrlG = new Point2D.Double(ROUTE_GAUCHE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
     private Point2D ctrlD = new Point2D.Double(ROUTE_DROITE, LIGNEHORIZONY + Route.INC_ROUTE / 2);
 
+    // Score du joueur
+    private int score = 0;
+
     /**
      * Constructeur
      *
@@ -172,7 +177,8 @@ public class Vue extends JPanel {
     /**
      * Getters & Setters
      *
-     * @return Modele
+     * @return Modele : modele; valeurVirageG, valeurVirageD : entiers; debutG,
+     * debutD, ctrlG, ctrlD : Point2D; kl : Deplacement(controleur)
      */
     public Modele getModele() {
         return modele;
@@ -238,6 +244,14 @@ public class Vue extends JPanel {
         this.kl = kl;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     /**
      * Affiche la vue. appelle toutes les fonctions d'affichages definies plus
      * bas. Gere les collisions, affiche la vitesse, les virages, mets a jour
@@ -274,6 +288,7 @@ public class Vue extends JPanel {
         System.out.println(this.modele.getCheckpoint().getPositionXGauche());
         System.out.println(this.modele.getCheckpoint().getPositionXDroite());*/
         affichageCheckpoint(g);
+        this.score = this.score + 1;
     }
 
     /**
@@ -323,14 +338,15 @@ public class Vue extends JPanel {
     }
 
     /**
-     * Affiche "GAME OVER" au milieu de l'ecran, et stoppe les threads de virage
-     * et de timer
+     * Affiche "GAME OVER" et le score au milieu de l'ecran, et stoppe les
+     * threads de virage et de timer
      *
      * @param g : Graphics
      */
     public void game_over(Graphics g) {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 45));
         g.drawString("GAME OVER", P_WIDTH / 2, P_HEIGHT / 2);
+        g.drawString("Score : " + this.score, P_WIDTH / 2, P_HEIGHT / 2 + 50);
         this.modele.getVirage().setRunning(false);
         this.modele.getTimer().setRunning(false);
         this.removeKeyListener(this.getKl());
@@ -376,6 +392,7 @@ public class Vue extends JPanel {
             g.drawImage(m, this.modele.getObstacle().getPositionX(), this.modele.getObstacle().getPositionY(), this.modele.getObstacle().getWidthheight(), this.modele.getObstacle().getWidthheight(), null);
             if (this.modele.getObstacle().getPositionY() == P_HEIGHT) {
                 this.modele.getObstacle().genererObstacle();
+                this.score = this.score + 10;
                 Random random = new Random();
                 int nb;
                 nb = random.nextInt(4);
